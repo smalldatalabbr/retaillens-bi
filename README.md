@@ -2,6 +2,15 @@
 
 **SQL Analytics para tomada de decisão em e-commerce com Power BI**
 
+![Author](https://img.shields.io/badge/author-Jhonathan%20Domingues-lightgrey)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Status](https://img.shields.io/badge/status-POC%20conclu%C3%ADda-success)
+
+![Data Engine](https://img.shields.io/badge/data%20engine-DuckDB-black?logo=duckdb&logoColor=white)
+![Query](https://img.shields.io/badge/query-SQL-blue?logo=postgresql&logoColor=white)
+![Notebook](https://img.shields.io/badge/environment-JupyterLab-orange?logo=jupyter&logoColor=white)
+![Dashboard](https://img.shields.io/badge/visualization-Power%20BI-yellow?logo=powerbi&logoColor=black)
+
 ![RetailLens BI – Executive Dashboard](imagens/thumbnail.png)
 
 ---
@@ -176,7 +185,7 @@ Análise de recebimentos, formas de pagamento, parcelamento e gap entre GMV e va
 
 ## Status
 
-POC concluída — curadoria finalizada, camada Gold BI-ready construída e dashboard executivo funcional.
+POC concluída - Curadoria finalizada, camada Gold BI-ready construída e dashboard executivo funcional.
 
 A etapa seguinte consiste em ajustes visuais e refinamento de layout.
 
@@ -199,8 +208,8 @@ Esta POC **não foi desenvolvida para uso em produção.**
 
 ---
 
-## Contato
+## Onde me encontrar
 
-**Jhonathan Domingues**
-
-🌐 [Portifólio](https://jhonathan.me) | 💼 [Linkedin](https://www.linkedin.com/in/jhonathandomingues)
+[![Website](https://img.shields.io/badge/🌐%20Website-Portfólio-black)](https://jhonathan.me)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Perfil-blue?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jhonathandomingues)
+[![Email](https://img.shields.io/badge/Email-Contato-success?logo=minutemailer&logoColor=white)](mailto:hello@jhonathan.me)
