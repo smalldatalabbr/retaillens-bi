@@ -1,169 +1,84 @@
 # RetailLens BI
 
-**SQL Analytics para tomada de decisão em e-commerce com Power BI**
+**Camada analítica BI-ready em SQL para dashboards executivos de e-commerce.**
 
 ![Author](https://img.shields.io/badge/author-Jhonathan%20Domingues-lightgrey)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-POC%20conclu%C3%ADda-success)
 
-![Data Engine](https://img.shields.io/badge/data%20engine-DuckDB-black?logo=duckdb&logoColor=white)
-![Query](https://img.shields.io/badge/query-SQL-blue?logo=postgresql&logoColor=white)
-![Notebook](https://img.shields.io/badge/environment-JupyterLab-orange?logo=jupyter&logoColor=white)
-![Dashboard](https://img.shields.io/badge/visualization-Power%20BI-yellow?logo=powerbi&logoColor=black)
+![DuckDB](https://img.shields.io/badge/data%20engine-DuckDB-black?logo=duckdb\&logoColor=white)
+![SQL](https://img.shields.io/badge/query-SQL-blue?logo=postgresql\&logoColor=white)
+![Jupyter](https://img.shields.io/badge/environment-JupyterLab-orange?logo=jupyter\&logoColor=white)
+![Power BI](https://img.shields.io/badge/visualization-Power%20BI-yellow?logo=powerbi\&logoColor=black)
 
-![RetailLens BI – Executive Dashboard](imagens/thumbnail.png)
-
----
-
-## Visão Geral
-
-Esta Proof of Concept (POC) tem como objetivo demonstrar a construção de um **Business Intelligence executivo para e-commerce**, a partir de dados transacionais curados e modelados em SQL, com consumo direto em Power BI.
-
-A POC simula um cenário real de atuação em times de dados, cobrindo desde a **curadoria estruturada dos dados** até a **entrega de dashboards gerenciais**, com foco em métricas claras, reprodutibilidade e separação adequada de responsabilidades entre dados e visualização.
-
-O foco não é análise exploratória ou diagnóstico aprofundado, mas sim **visão executiva do negócio**, respondendo à pergunta:
-
-> *“O que aconteceu com o e-commerce?”*
+![RetailLens BI](imagens/retaillens-results.png)
 
 ---
 
-## Problema de Negócio
+# Visão Geral
 
-Operações de e-commerce geram grande volume de dados, mas frequentemente enfrentam desafios como:
+A **RetailLens BI** é uma **Proof of Concept (POC)** que demonstra a construção de uma **camada analítica BI-ready em SQL** para suporte à tomada de decisão em operações de e-commerce.
 
-* ausência de métricas consolidadas
-* dashboards dependentes de lógica no BI
-* inconsistência entre números reportados
-* dificuldade de escalar análises operacionais
+O projeto simula um cenário comum em times de dados: transformar dados operacionais brutos em uma **estrutura analítica consistente**, capaz de alimentar dashboards executivos sem dependência de lógica no BI.
 
-Esta POC demonstra como estruturar uma **camada analítica confiável (Gold)** que permita a construção de dashboards executivos simples, consistentes e defensáveis.
-
----
-
-## Abordagem de Dados
-
-A POC segue uma abordagem em camadas, alinhada a boas práticas de engenharia e analytics:
-
-1. **Curadoria de Dados (Silver)**
-   Padronização, validação e criação de views intermediárias a partir do dataset original.
-
-2. **Camada Gold BI-Ready**
-   Consolidação de dados operacionais, logísticos e financeiros em nível de pedido, com regras claras de negócio.
-
-3. **Consumo em Power BI**
-   Utilização da camada Gold como **fonte única da verdade**, sem lógica de transformação no dashboard.
-
----
-
-## Dataset
-
-* **Fonte:** [Olist E-commerce Dataset (Kaggle)](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
-* **Contexto:** Marketplace brasileiro de e-commerce
-* **Período:** 2016–2018
-
-O dataset é utilizado exclusivamente como **meio demonstrativo**, sendo adaptado para uma arquitetura em camadas utilizando DuckDB.
-
----
-
-### Ingestão de Dados
-
-A ingestão e conversão dos dados brutos (CSV) para DuckDB foi realizada por meio de um script dedicado, mantido no repositório como **referência técnica e evidência de reprodutibilidade**.
-
-O banco DuckDB versionado é considerado a **fonte oficial de dados** para esta POC.
-
----
-
-## Estrutura do Projeto
+A POC cobre todo o fluxo:
 
 ```text
-retaillens-bi/
-│
-├── data/
-│   └── olist.duckdb
-├── notebooks/
-│   ├── 01_curadoria_sql.ipynb
-│   └── 02_gold_ecommerce_executive_bi.ipynb
-├── scripts/
-│   └── ingest_olist_to_duckdb.py
-├── src/
-│   └── paths.py
-├── dashboards/
-│   └── retaillens_bi.pbix
-├── imagens/
-│   ├── thumbnail.jpg
-│   ├── overview_dashboard.png
-│   ├── logistics_dashboard.png
-│   └── finance_dashboard.png
-└── README.md
+dados operacionais → curadoria SQL → camada Gold analítica → dashboards executivos
 ```
----
 
-### Observação sobre os Notebooks
-
-Os notebooks presentes neste repositório têm caráter **demonstrativo e documental**.  
-Eles registram a lógica de curadoria, modelagem e construção da camada Gold, servindo como evidência do raciocínio analítico e das decisões técnicas adotadas.
-
-A execução dos notebooks **não é necessária** para consumo dos dashboards, uma vez que a base DuckDB versionada já representa o estado final da curadoria de dados.
+O objetivo é demonstrar como uma modelagem analítica bem estruturada permite construir **dashboards simples, confiáveis e escaláveis**.
 
 ---
 
-## Camada Gold - `gold_orders_enriched`
+# Problema de Negócio
 
-A camada Gold consolida informações em **nível de pedido**, com granularidade:
+Operações de e-commerce produzem grande volume de dados operacionais, mas frequentemente enfrentam problemas como:
 
-* **1 linha por pedido (`order_id`)**
+* métricas inconsistentes entre dashboards
+* lógica de negócio implementada diretamente no BI
+* dificuldade de reproduzir números reportados
+* dashboards difíceis de escalar ou manter
 
-### Conteúdo da Gold
-
-* status e datas do pedido
-* métricas logísticas (tempo de entrega, atraso)
-* métricas financeiras (GMV, frete, pagamentos)
-* dados do cliente (UF, cidade)
-* categoria principal do pedido
-* flags operacionais e financeiras para BI
-
-### Características
-
-* pronta para consumo direto no Power BI
-* sem lógica analítica ou interpretativa
-* métricas resolvidas em SQL
-* estrutura pensada para KPIs, séries temporais e filtros simples
+A **RetailLens BI** demonstra como estruturar uma **camada analítica centralizada**, capaz de servir como **fonte única da verdade para consumo executivo**.
 
 ---
 
-## Power BI - Entrega Executiva
+# Abordagem da Solução
 
-O Power BI consome exclusivamente a view:
+A solução segue uma arquitetura em camadas, separando claramente organização de dados e visualização.
 
-* `gold_orders_enriched` (DuckDB)
+### Curadoria de Dados (Silver)
 
-### Filtros padrão aplicados
-
-* pedidos completos (`is_completed_order = 1`)
-* pedidos com dados financeiros (`has_financials = 1`)
-
-## Visão Geral dos Dashboards
-
-A POC é composta por três dashboards principais, cada um com um objetivo claro:
-
-### Overview Executivo
-Visão consolidada de volume, receita, mix de categorias e distribuição geográfica.
-
-![Overview Executivo](imagens/overview_dashboard.png)
-
-### Logística
-Análise de tempo de entrega, atraso, intensidade do atraso e concentração do problema por estado e categoria.
-
-![Dashboard de Logística](imagens/logistics_dashboard.png)
-
-### Financeiro
-Análise de recebimentos, formas de pagamento, parcelamento e gap entre GMV e valor efetivamente pago.
-
-![Dashboard Financeiro](imagens/finance_dashboard.png)
+* padronização do dataset original
+* criação de views intermediárias
+* consolidação de dados operacionais
 
 ---
 
-## Tecnologias Utilizadas
+### Camada Gold Analítica
+
+* consolidação de métricas em nível de pedido
+* resolução de regras de negócio em SQL
+* criação de estrutura preparada para consumo analítico
+
+Essa camada funciona como **fonte única de dados para os dashboards executivos**.
+
+---
+
+### Consumo no Power BI
+
+O Power BI consome diretamente a view:
+
+```
+gold_orders_enriched
+```
+
+Nenhuma transformação é realizada no dashboard, garantindo consistência entre visualizações e métricas.
+
+---
+
+# Tecnologias Utilizadas
 
 * SQL
 * DuckDB
@@ -173,43 +88,154 @@ Análise de recebimentos, formas de pagamento, parcelamento e gap entre GMV e va
 
 ---
 
-## Decisões de Design
+# Arquitetura Analítica
 
-* grão único: 1 linha por pedido (`order_id`)
-* métricas resolvidas integralmente em SQL na camada Gold
-* Power BI utilizado exclusivamente para visualização
-* separação explícita entre a POC **RetailLens BI** (executiva) e análises exploratórias fora do escopo desta entrega
-* foco em clareza, consistência e leitura executiva
+A modelagem analítica segue um princípio simples:
+
+```text
+dados operacionais
+      ↓
+curadoria SQL
+      ↓
+camada Gold analítica
+      ↓
+dashboards executivos
+```
+
+A tabela principal da camada Gold possui granularidade:
+
+```
+1 linha por pedido (order_id)
+```
+
+Ela consolida:
+
+* métricas logísticas
+* métricas financeiras
+* dados de cliente
+* categoria principal do pedido
+* indicadores operacionais e financeiros
+
+Essa estrutura permite criar dashboards executivos sem lógica adicional no BI.
 
 ---
 
-## Status
+# Estrutura do Projeto
 
-POC concluída - Curadoria finalizada, camada Gold BI-ready construída e dashboard executivo funcional.
+```text
+retaillens-bi/
 
-A etapa seguinte consiste em ajustes visuais e refinamento de layout.
+├── data/
+│   └── olist.duckdb
+│
+├── notebooks/
+│   ├── 01_curadoria_sql.ipynb
+│   └── 02_gold_ecommerce_executive_bi.ipynb
+│
+├── scripts/
+│   └── ingest_olist_to_duckdb.py
+│
+├── src/
+│   └── paths.py
+│
+├── dashboards/
+│   └── retaillens_bi.pbix
+│
+├── imagens/
+│   ├── thumbnail.jpg
+│   ├── overview_dashboard.png
+│   ├── logistics_dashboard.png
+│   └── finance_dashboard.png
+│
+└── README.md
+```
+
+Os notebooks documentam a lógica de curadoria e construção da camada Gold.
+
+A execução deles **não é necessária para visualizar os dashboards**, pois o banco DuckDB versionado já contém o estado final da modelagem analítica.
 
 ---
 
-## Licença
+# Dashboards
 
-Este projeto está licenciado sob os termos da **MIT License**.
-Consulte o arquivo `LICENSE` para mais detalhes.
+A POC apresenta três dashboards executivos construídos sobre a camada Gold.
 
 ---
 
-## Disclaimer
+## Overview Executivo
 
-Este projeto é uma **Proof of Concept (POC)** desenvolvida com o objetivo de **demonstrar capacidade técnica e visão analítica aplicada a problemas reais de negócio**, utilizando ferramentas, métodos e práticas comuns em ambientes profissionais de dados.
+![Overview Executivo](imagens/overview_dashboard.png)
 
-As análises, visualizações, conclusões e recomendações apresentadas têm caráter **demonstrativo** e **não devem ser interpretadas como direcionamento operacional real**, nem como base direta para tomada de decisão em ambiente produtivo.
+Visão consolidada de volume de pedidos, receita, mix de categorias e distribuição geográfica das vendas.
 
-Esta POC **não foi desenvolvida para uso em produção.**
+---
+
+## Logística
+
+![Dashboard de Logística](imagens/logistics_dashboard.png)
+
+Análise de tempo de entrega, intensidade do atraso e concentração do problema por estado e categoria.
+
+---
+
+## Financeiro
+
+![Dashboard Financeiro](imagens/finance_dashboard.png)
+
+Análise de pagamentos, parcelamento e diferença entre GMV e valor efetivamente recebido.
+
+---
+
+# Resultados
+
+A RetailLens BI demonstra como estruturar dados operacionais para consumo analítico consistente.
+
+A POC entrega:
+
+* camada analítica BI-ready construída em SQL
+* modelo com granularidade consistente (1 linha por pedido)
+* métricas resolvidas na camada de dados
+* dashboards executivos alimentados por uma única fonte analítica
+* separação clara entre dados e visualização
+
+---
+
+# Status
+
+**POC concluída**
+
+* curadoria de dados finalizada
+* camada Gold analítica construída
+* dashboards executivos funcionais
+
+---
+
+# Disclaimer
+
+Este projeto é uma **Proof of Concept (POC)** desenvolvida com fins demonstrativos.
+
+As análises e visualizações apresentadas têm caráter ilustrativo e não devem ser utilizadas diretamente como base para decisões operacionais em ambiente produtivo.
+
+---
+
+# Explore outros projetos do Small Data Lab
+
+Este projeto faz parte do **Small Data Lab**, um laboratório técnico dedicado à experimentação aplicada em dados, analytics e sistemas de IA.
+
+Explore também outras POCs do laboratório:
+
+- [LakeFlow](https://github.com/smalldatalabbr/lakeflow) — Pipeline Lakehouse para ingestão e organização de dados externos.  
+- [DelayImpact](https://github.com/smalldatalabbr/delayimpact-analytics) — Análise que investiga o impacto de atrasos logísticos na satisfação do cliente. 
+- [CampaignSense](https://github.com/smalldatalabbr/campaignsense) — CRM Analytics para priorização de campanhas baseada em propensão e ROI.  
+- [FraudWatch](https://github.com/smalldatalabbr/fraudwatch) — Sistema de decisão antifraude que transforma scores de ML em políticas operacionais auditáveis.  
+- [DocLens](https://github.com/smalldatalabbr/doclens) — Chatbot RAG com guardrails e testes adversariais para governança de LLMs.
 
 ---
 
 ## Onde me encontrar
 
-[![Website](https://img.shields.io/badge/🌐%20Website-Portfólio-black)](https://jhonathan.me)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Perfil-blue?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jhonathandomingues)
-[![Email](https://img.shields.io/badge/Email-Contato-success?logo=minutemailer&logoColor=white)](mailto:hello@jhonathan.me)
+[Portfólio](https://jhonathan.me) | [LinkedIn](https://www.linkedin.com/in/jhonathandomingues) | [Email](mailto:hello@jhonathan.me)
+
+---
+
+Este repositório é licenciado sob a MIT License.
